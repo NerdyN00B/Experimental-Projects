@@ -61,7 +61,7 @@ def delta_angle(distance,
 
 if __name__ == "__main__":
     distances = np.linspace(1, 100, 1000)
-    delta_amp = delta_pos(distances, separation=0.5, delta_distance=1e-6)
+    delta_amp = delta_pos(distances, separation=0.5, delta_distance=1e-4)
     fig, ax = plt.subplots(2, 1, layout="tight")
     ax[0].plot(
         distances,
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     ax[0].set(
         xlabel="Distance to window (m)",
         ylabel="Laser movement (mm)",
-        title="Laser movement due amplitudal window vibrations of order 1μm",
+        title="Laser movement due amplitudal window vibrations of order 100μm",
         xscale="log",
     )
     ax[0].grid()
@@ -80,63 +80,63 @@ if __name__ == "__main__":
     delta_ang = delta_angle(
         distances,
         separation=0.5,
-        delta_distance=1e-6,
+        delta_distance=1e-4,
         window_size=1
     )
     ax[1].plot(
         distances,
         delta_ang * 1e3,
-        label="angular change. Separation 0.5m, Vibration 1μm, window size 1m",
+        label="angular change. Separation 0.5m, Vibration 100μm, window size 1m",
         c='k'
     )
     ax[1].set(
         xlabel="Distance to window (m)",
         ylabel="Laser movement (mm)",
-        title="Laser movement due angular window vibrations of order 1μm",
+        title="Laser movement due angular window vibrations of order 100μm",
         xscale="log",
     )
     ax[1].grid()
     
-    fig.savefig("preparation/afstand_log_um.png", dpi=300)
-    fig.savefig("preparation/afstand_log_um.pdf", dpi=300)
+    fig.savefig("preparation/afstand_log_100um.png", dpi=300)
+    fig.savefig("preparation/afstand_log_100um.pdf", dpi=300)
+
+    # distance = 10  # m
+    # delta = np.linspace(1e-6, 1e-3, 1000)
+    # delta_amp = delta_pos(distance, separation=0.5, delta_distance=delta)
+    # delta_ang = delta_angle(
+    #     distance,
+    #     separation=0.5,
+    #     delta_distance=delta,
+    #     window_size=1
+    # )
     
-    distance = 10  # m
-    delta = np.linspace(1e-6, 1e-3, 1000)
-    delta_amp = delta_pos(distance, separation=0.5, delta_distance=delta)
-    delta_ang = delta_angle(
-        distance,
-        separation=0.5,
-        delta_distance=delta,
-        window_size=1
-    )
-    
-    fig, ax = plt.subplots(2, 1, layout="tight")
-    ax[0].plot(
-        delta * 1e3,
-        delta_amp * 1e3,
-        label="amplitudal change. Separation 0.5m, Distance 100m",
-        c='k'
-    )
-    ax[0].set(
-        xlabel="Window vibration amplitude (mm)",
-        ylabel="Laser movement (mm)",
-        title=f"Laser movement due to amplitudal window vibrations at {distance}m",
-        xscale="log",
-    )
-    ax[0].grid()
-    ax[1].plot(
-        delta * 1e3,
-        delta_ang * 1e3,
-        label="angular change. Separation 0.5m, Distance 100m, window size 1m",
-        c='k'
-    )
-    ax[1].set(
-        xlabel="Window vibration amplitude (mm)",
-        ylabel="Laser movement (mm)",
-        title=f"Laser movement due to angular window vibrations at {distance}m",
-        xscale="log",
-    )
-    ax[1].grid()
-    fig.savefig(f"preparation/vibrationamp_{distance}m_log.png", dpi=300)
-    fig.savefig(f"preparation/vibrationamp_{distance}m_log.pdf", dpi=300)
-    plt.show()
+    # fig, ax = plt.subplots(2, 1, layout="tight")
+    # ax[0].plot(
+    #     delta * 1e3,
+    #     delta_amp * 1e3,
+    #     label="amplitudal change. Separation 0.5m, Distance 100m",
+    #     c='k'
+    # )
+    # ax[0].set(
+    #     xlabel="Window vibration amplitude (mm)",
+    #     ylabel="Laser movement (mm)",
+    #     title=f"Laser movement due to amplitudal window vibrations at {distance}m",
+    #     xscale="log",
+    # )
+    # ax[0].grid()
+    # ax[1].plot(
+    #     delta * 1e3,
+    #     delta_ang * 1e3,
+    #     label="angular change. Separation 0.5m, Distance 100m, window size 1m",
+    #     c='k'
+    # )
+    # ax[1].set(
+    #     xlabel="Window vibration amplitude (mm)",
+    #     ylabel="Laser movement (mm)",
+    #     title=f"Laser movement due to angular window vibrations at {distance}m",
+    #     xscale="log",
+    # )
+    # ax[1].grid()
+    # fig.savefig(f"preparation/vibrationamp_{distance}m_log.png", dpi=300)
+    # fig.savefig(f"preparation/vibrationamp_{distance}m_log.pdf", dpi=300)
+    # plt.show()
