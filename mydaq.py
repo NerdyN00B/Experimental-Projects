@@ -21,7 +21,7 @@ import matplotlib.gridspec as gridspec
 
 class MyDAQ():
     """A class to controll the MyDAQ"""
-    def __init__(self, samplerate: int, name: str='myDAQ2'):
+    def __init__(self, samplerate: int, name: str='myDAQ1'):
         self.finite = dx.constants.AcquisitionType.FINITE
         self.__samplerate = samplerate
         self.__name = name
