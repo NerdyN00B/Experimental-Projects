@@ -21,7 +21,7 @@ _, sine = MyDAQ.generateWaveform(
 )
 
 data = daq.readWrite(sine, write_channel='ao0', read_channel='ai1')
-np.save(f'data/single_frequency_{frequency}Hz_{now}.npy', data)
+np.save(f'data/{now}_single_frequency_{frequency}Hz.npy', data)
 
 fft = np.fft.fft(data)
 fft_freq = np.fft.fftfreq(len(data), 1/daq.samplerate)
