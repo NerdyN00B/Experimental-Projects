@@ -1,0 +1,60 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy.stats as stats
+import math
+
+"""Theoretical TEST split detector """
+def find_nearest(array, value):
+    array = np.asarray(array)
+    idx = (np.abs(array - value)).argmin()
+    return array[idx]
+
+Time = 1
+Samplerate = 100
+theta = np.linspace(0, 8*np.pi, Time*Samplerate)
+mu = np.sin(theta)
+Pos = np.array([])
+Signal = np.array([])
+for i in mu:
+    variance = 1
+    sigma = math.sqrt(variance)
+    Range = 5
+    x = np.linspace(i - Range*sigma, i + Range*sigma, 100000)
+    I_tot = stats.norm.pdf(x, i, sigma)
+    # plt.plot(x, I_tot)
+    # plt.show()
+    
+    #omega = x[np.where(I_tot == find_nearest(I_tot,max(I_tot)/np.e**2))][-1] - i
+    #print(omega)
+    omega = 2 #mm
+    I_1 = I_tot[np.where(x >= 0)]
+    x1 = [i for i in x if i >= 0]
+    I_2 = I_tot[np.where(x < 0)]
+    x2 = [i for i in x if i < 0]
+    # plt.plot(x1, I_1)
+    # plt.plot(x2, I_2)
+    # plt.show()
+    
+    
+    S = (np.trapz(I_1)-np.trapz(I_2))/np.trapz(I_tot)
+    x = ((np.sqrt(np.pi)*omega)/(2*np.sqrt(2)))*S
+    Pos = np.append(Pos, x)
+    Signal = np.append(Signal, S)
+#%% PLotting
+
+x = np.linspace(0, Time, Samplerate)
+plt.plot(x, Pos, label = "Actual movement")
+plt.plot(x, mu, label = "split detector Error func")
+plt.plot(x, Signal, label = "split detector linear func")
+plt.title("Laser Movement")
+plt.xlabel("Time (s)")
+plt.ylabel("Lasermovement (mm)")
+plt.legend(bbox_to_anchor=(1, 1))
+
+#%% Code to use
+
+I_1 = 2 #INPUT 1
+I_2 = 2 #INPUT 2
+I_tot = I_1 + I_2
+S = (I_1-I_2)/I_tot
+x = ((np.sqrt(np.pi)*omega)/(2*np.sqrt(2)))*S
