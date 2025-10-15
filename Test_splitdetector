@@ -10,9 +10,9 @@ def find_nearest(array, value):
     return array[idx]
 
 Time = 1
-Samplerate = 100
-theta = np.linspace(0, 8*np.pi, Time*Samplerate)
-mu = np.sin(theta)
+Samplerate = 1000
+theta = np.linspace(0, 16*np.pi, Time*Samplerate)
+mu = np.sin(theta)+2*np.sin(2*theta)
 Pos = np.array([])
 Signal = np.array([])
 for i in mu:
@@ -40,21 +40,33 @@ for i in mu:
     x = ((np.sqrt(np.pi)*omega)/(2*np.sqrt(2)))*S
     Pos = np.append(Pos, x)
     Signal = np.append(Signal, S)
-#%% PLotting
+#%% PLotting Signal
 
 x = np.linspace(0, Time, Samplerate)
-plt.plot(x, Pos, label = "Actual movement")
-plt.plot(x, mu, label = "split detector Error func")
+plt.plot(x, mu, label = "Actual movement")
+plt.plot(x, Pos, label = "split detector Error func")
 plt.plot(x, Signal, label = "split detector linear func")
 plt.title("Laser Movement")
 plt.xlabel("Time (s)")
 plt.ylabel("Lasermovement (mm)")
 plt.legend(bbox_to_anchor=(1, 1))
+plt.show()
 
-#%% Code to use
+#%% PLotting FFT
+fft_freq_pos = np.fft.fftfreq(len(Pos), 1/Samplerate) 
+fft_freq_mu = np.fft.fftfreq(len(mu), 1/Samplerate) 
+fft_freq_signal = np.fft.fftfreq(len(Signal), 1/Samplerate) 
 
-I_1 = 2 #INPUT 1
-I_2 = 2 #INPUT 2
-I_tot = I_1 + I_2
-S = (I_1-I_2)/I_tot
-x = ((np.sqrt(np.pi)*omega)/(2*np.sqrt(2)))*S
+fft_pos = np.fft.fft(Pos)
+fft_mu = np.fft.fft(mu)
+fft_signal = np.fft.fft(Signal)
+
+plt.plot(fft_freq_mu,fft_mu , label = "Actual movement")
+plt.plot(fft_freq_pos+2,fft_pos , label = "split detector Error func")
+plt.plot(fft_freq_signal+4,fft_signal , label = "split detector linear func")
+plt.title("FFT Laser Movement")
+plt.xlabel("frequentie (Hz)")
+plt.ylabel("Amplitude")
+plt.xlim(-50,50)
+plt.legend(bbox_to_anchor=(1, 1))
+plt.show()
