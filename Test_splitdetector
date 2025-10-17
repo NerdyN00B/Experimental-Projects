@@ -1,0 +1,72 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy.stats as stats
+import math
+
+"""Theoretical TEST split detector """
+def find_nearest(array, value):
+    array = np.asarray(array)
+    idx = (np.abs(array - value)).argmin()
+    return array[idx]
+
+Time = 1
+Samplerate = 1000
+theta = np.linspace(0, 16*np.pi, Time*Samplerate)
+mu = np.sin(theta)+2*np.sin(2*theta)
+Pos = np.array([])
+Signal = np.array([])
+for i in mu:
+    variance = 1
+    sigma = math.sqrt(variance)
+    Range = 5
+    x = np.linspace(i - Range*sigma, i + Range*sigma, 100000)
+    I_tot = stats.norm.pdf(x, i, sigma)
+    # plt.plot(x, I_tot)
+    # plt.show()
+    
+    #omega = x[np.where(I_tot == find_nearest(I_tot,max(I_tot)/np.e**2))][-1] - i
+    #print(omega)
+    omega = 2 #mm
+    I_1 = I_tot[np.where(x >= 0)]
+    x1 = [i for i in x if i >= 0]
+    I_2 = I_tot[np.where(x < 0)]
+    x2 = [i for i in x if i < 0]
+    # plt.plot(x1, I_1)
+    # plt.plot(x2, I_2)
+    # plt.show()
+    
+    
+    S = (np.trapz(I_1)-np.trapz(I_2))/np.trapz(I_tot)
+    x = ((np.sqrt(np.pi)*omega)/(2*np.sqrt(2)))*S
+    Pos = np.append(Pos, x)
+    Signal = np.append(Signal, S)
+#%% PLotting Signal
+
+x = np.linspace(0, Time, Samplerate)
+plt.plot(x, mu, label = "Actual movement")
+plt.plot(x, Pos, label = "split detector Error func")
+plt.plot(x, Signal, label = "split detector linear func")
+plt.title("Laser Movement")
+plt.xlabel("Time (s)")
+plt.ylabel("Lasermovement (mm)")
+plt.legend(bbox_to_anchor=(1, 1))
+plt.show()
+
+#%% PLotting FFT
+fft_freq_pos = np.fft.fftfreq(len(Pos), 1/Samplerate) 
+fft_freq_mu = np.fft.fftfreq(len(mu), 1/Samplerate) 
+fft_freq_signal = np.fft.fftfreq(len(Signal), 1/Samplerate) 
+
+fft_pos = np.fft.fft(Pos)
+fft_mu = np.fft.fft(mu)
+fft_signal = np.fft.fft(Signal)
+
+plt.plot(fft_freq_mu/(2*np.pi),fft_mu , label = "Actual movement")
+plt.plot(fft_freq_pos/(2*np.pi),fft_pos , label = "split detector Error func")
+plt.plot(fft_freq_signal/(2*np.pi),fft_signal , label = "split detector linear func")
+plt.title("FFT Laser Movement")
+plt.xlabel("frequentie (Hz)")
+plt.ylabel("Amplitude")
+plt.xlim(-3,3)
+plt.legend(bbox_to_anchor=(1, 1))
+plt.show()
