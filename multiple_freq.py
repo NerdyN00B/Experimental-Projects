@@ -16,16 +16,16 @@ for freq in frequencies:
     sine += newsine
 
 sine /= np.max(np.abs(sine))  # Normalize to -1 to 1
-sine *= 3  # Scale to -3 to 3 V
+sine *= 3  # Scale sine sum
 
-data = daq.readWrite(sine)
-np.save(f"data/multiple_freq_{now}.npy", data)
+data = daq.readWrite(sine, write_channel='ao0', read_channel='ai1')
+np.save(f"data/{now}_multiple_freq.npy", data)
 
 fft = np.fft.fft(data)
 fft_freq = np.fft.fftfreq(len(data), 1/daq.samplerate)
 dB = 20*np.log10(np.abs(fft))
 
-fig, ax = plt.subplots(figsize=(16, 10))
+fig, ax = plt.subplots(figsize=(16, 10), layout='tight')
 
 frequencies.append(300)
 # idx = MyDAQ.find_nearest_idx(fft_freq, frequencies)
@@ -54,6 +54,6 @@ ax.set(
     title=f'Multiple Frequencies'
 )
 
-plt.savefig(f'figures/multiple_frequencies_Hz_{now}.png', dpi=300)
-plt.savefig(f'figures/multiple_frequencies_Hz_{now}.pdf', dpi=300)
+plt.savefig(f'figures/{now}_multiple_frequencies_Hz.png', dpi=300)
+plt.savefig(f'figures/{now}_multiple_frequencies_Hz.pdf', dpi=300)
 

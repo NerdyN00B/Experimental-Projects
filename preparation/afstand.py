@@ -61,12 +61,12 @@ def delta_angle(distance,
 
 if __name__ == "__main__":
     distances = np.linspace(1, 100, 1000)
-    delta_amp = delta_pos(distances, separation=0.5, delta_distance=1e-4)
+    delta_amp = delta_pos(distances, separation=2, delta_distance=1e-4)
     fig, ax = plt.subplots(2, 1, layout="tight")
     ax[0].plot(
         distances,
         delta_amp * 1e3,
-        label="amplitudal change. Separation 0.5m, Vibration 1mm",
+        label="amplitudal change. Separation 2m, Vibration 1mm",
         c='k'
     )
     ax[0].set(
@@ -79,14 +79,14 @@ if __name__ == "__main__":
     
     delta_ang = delta_angle(
         distances,
-        separation=0.5,
+        separation=2,
         delta_distance=1e-4,
         window_size=1
     )
     ax[1].plot(
         distances,
         delta_ang * 1e3,
-        label="angular change. Separation 0.5m, Vibration 100μm, window size 1m",
+        label="angular change. Separation 2m, Vibration 100μm, window size 1m",
         c='k'
     )
     ax[1].set(
@@ -97,8 +97,8 @@ if __name__ == "__main__":
     )
     ax[1].grid()
     
-    fig.savefig("preparation/afstand_log_100um.png", dpi=300)
-    fig.savefig("preparation/afstand_log_100um.pdf", dpi=300)
+    fig.savefig("preparation/afstand_log_100um_2m.png", dpi=300)
+    fig.savefig("preparation/afstand_log_100um_2m.pdf", dpi=300)
 
     # distance = 10  # m
     # delta = np.linspace(1e-6, 1e-3, 1000)

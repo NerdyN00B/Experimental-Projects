@@ -6,6 +6,7 @@ from mydaq import MyDAQ
 
 
 frequency = 500  # Hz
+amplitude = .3  # V
 
 now = time.strftime("%Y%m%d%H%M%S")
 
@@ -16,7 +17,7 @@ _, sine = MyDAQ.generateWaveform(
     'sine',
     samplerate=daq.samplerate,
     frequency=frequency,
-    amplitude=0.25,
+    amplitude=amplitude,
     duration=5,
 )
 
@@ -27,7 +28,7 @@ fft = np.fft.fft(data)
 fft_freq = np.fft.fftfreq(len(data), 1/daq.samplerate)
 dB = 20*np.log10(np.abs(fft))
 
-fig, ax = plt.subplots()
+fig, ax = plt.subplots(figsize=(16, 10), layout='tight')
 
 idx = MyDAQ.find_nearest_idx(fft_freq, frequency)
 ax.vlines(
@@ -48,12 +49,11 @@ ax.scatter(
     color='k',
 )
 
-ax.set(
-    xscale='log',
-    xlabel='Frequency (Hz)',
-    ylabel='Magnitude (dB)',
-    title=f'Single Frequency {frequency} Hz',
-)
+ax.set_xscale('log')
+ax.set_xlabel('Frequency (Hz)', fontsize=16)
+ax.set_ylabel('Magnitude (dB)', fontsize=16)
+ax.set_title(f'Single Frequency Response at {frequency} Hz', fontsize=20)
+ax.grid()
 
-plt.savefig(f'figures/single_frequency_{frequency}Hz_{now}.png', dpi=300)
-plt.savefig(f'figures/single_frequency_{frequency}Hz_{now}.pdf', dpi=300)
+plt.savefig(f'figures/{now}_single_frequency_{frequency}Hz.png', dpi=300)
+plt.savefig(f'figures/{now}_single_frequency_{frequency}Hz.pdf', dpi=300)

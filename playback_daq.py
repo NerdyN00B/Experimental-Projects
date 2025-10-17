@@ -4,9 +4,9 @@ import time
 
 from mydaq import MyDAQ
 
-just_playback = True
+just_playback = False
 
-playback = np.load(r'data\20251010120245_playback_record.npy')
+playback = np.load(r'data\hallo_ep_2.npy')
 
 now = time.strftime("%Y%m%d%H%M%S")
 
