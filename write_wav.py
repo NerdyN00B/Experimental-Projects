@@ -4,7 +4,7 @@ import numpy as np
 
 samplerate = 44100  # Hertz
 
-file = r'data\20251017143335_playback_record.npy'
+file = r'data\20251022164245_playback_record.npy'
 
 data = np.load(file)
 

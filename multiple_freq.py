@@ -4,6 +4,8 @@ import time
 
 from mydaq import MyDAQ
 
+amplitude = 3  # V
+
 now = time.strftime("%Y%m%d%H%M%S")
 
 daq = MyDAQ(44100, 'myDAQ4')
@@ -16,7 +18,7 @@ for freq in frequencies:
     sine += newsine
 
 sine /= np.max(np.abs(sine))  # Normalize to -1 to 1
-sine *= 3  # Scale sine sum
+sine *= amplitude  # Scale sine sum
 
 data = daq.readWrite(sine, write_channel='ao0', read_channel='ai1')
 np.save(f"data/{now}_multiple_freq.npy", data)
@@ -42,17 +44,18 @@ frequencies.append(300)
 ax.scatter(
     fft_freq[:len(fft)//2],
     dB[:len(fft)//2],
-    s=1,
+    s=2,
     marker='.',
     color='k',
 )
 
-ax.set(
-    xscale='log',
-    xlabel='Frequency (Hz)',
-    ylabel='Magnitude (dB)',
-    title=f'Multiple Frequencies'
-)
+ax.set_xscale('log')
+ax.set_xlabel('Frequency (Hz)', fontsize=24)
+ax.set_ylabel('Magnitude (dB)', fontsize=24)
+ax.set_title(f'Multiple Frequencies Response at {frequencies} Hz, {amplitude} V', 
+             fontsize=30)
+ax.tick_params(axis='both', which='major', labelsize=18)
+ax.grid()
 
 plt.savefig(f'figures/{now}_multiple_frequencies_Hz.png', dpi=300)
 plt.savefig(f'figures/{now}_multiple_frequencies_Hz.pdf', dpi=300)

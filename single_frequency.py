@@ -6,7 +6,7 @@ from mydaq import MyDAQ
 
 
 frequency = 500  # Hz
-amplitude = .3  # V
+amplitude = 3  # V
 
 now = time.strftime("%Y%m%d%H%M%S")
 
@@ -44,15 +44,18 @@ ax.vlines(
 ax.scatter(
     fft_freq[:len(fft)//2],
     dB[:len(fft)//2],
-    s=1,
+    s=2,
     marker='.',
     color='k',
 )
 
 ax.set_xscale('log')
-ax.set_xlabel('Frequency (Hz)', fontsize=16)
-ax.set_ylabel('Magnitude (dB)', fontsize=16)
-ax.set_title(f'Single Frequency Response at {frequency} Hz', fontsize=20)
+ax.set_xlabel('Frequency (Hz)', fontsize=24)
+ax.set_ylabel('Magnitude (dB)', fontsize=24)
+ax.set_title(f'Single Frequency Response at {frequency} Hz, {amplitude} V', 
+             fontsize=30)
+
+ax.tick_params(axis='both', which='major', labelsize=18)
 ax.grid()
 
 plt.savefig(f'figures/{now}_single_frequency_{frequency}Hz.png', dpi=300)
