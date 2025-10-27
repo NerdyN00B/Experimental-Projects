@@ -5,7 +5,7 @@ import time
 from mydaq import MyDAQ
 
 
-frequency = 500  # Hz
+frequency = 731  # Hz
 amplitude = 3  # V
 
 now = time.strftime("%Y%m%d%H%M%S")
