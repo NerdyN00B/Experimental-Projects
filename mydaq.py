@@ -21,10 +21,10 @@ import matplotlib.gridspec as gridspec
 
 class MyDAQ():
     """A class to controll the MyDAQ"""
-    def __init__(self, samplerate: int, name: str='myDAQ1'):
+    def __init__(self, samplerate: int, names: list=['myDAQ1']):
         self.finite = dx.constants.AcquisitionType.FINITE
         self.__samplerate = samplerate
-        self.__name = name
+        self.__name = names
 
     @property
     def samplerate(self) -> int:
@@ -134,8 +134,8 @@ class MyDAQ():
         )
 
     def readWrite(self, write_data, rate=None, samps=None, 
-                  read_channel='ai0',
-                  write_channel='ao0'
+                  read_channel='ai01',
+                  write_channel='ao01'
                   ) -> np.ndarray:
         """Reads and writes data to the MyDAQ.
         
@@ -247,7 +247,72 @@ class MyDAQ():
             writeTask.write(write_data, auto_start=True)
             sleep(samps/rate + 0.001)
             writeTask.stop()
-    
+
+    def dual_myDAQ_write_read(self, imput, number_of_samples_per_channel, outputchans1 = [], inputchans1 = [], outputchans2 = [], inputchans2 = []):
+        """ This function allows you to read and write with two mydaqs simultaneously."""
+        
+        with dx.Task('AOTask') as writeTask, dx.Task('AITask') as readTask, dx.Task('AOTask2') as writeTask2, dx.Task('AITask2') as readTask2:
+            
+            #Settings for myDAQ1
+            
+            if inputchans1 != []:
+                for i in inputchans1:
+                    readTask.ai_channels.add_ai_voltage_chan(i)
+                
+
+                print(self.__samplerate, len(imput))
+                readTask.timing.cfg_samp_clk_timing(self.__samplerate, sample_mode = dx.constants.AcquisitionType.FINITE, \
+                                                    samps_per_chan=len(imput))
+            
+            if outputchans1 != []:
+                for i in outputchans1:
+                    writeTask.ao_channels.add_ao_voltage_chan(i)
+        
+
+                print(self.__samplerate, len(imput))
+                writeTask.timing.cfg_samp_clk_timing(self.__samplerate, sample_mode = dx.constants.AcquisitionType.FINITE, \
+                                                    samps_per_chan=len(imput))
+                
+            if inputchans2 != []:
+                for i in inputchans2:
+                    readTask2.ai_channels.add_ai_voltage_chan(i)
+                
+                print(self.__samplerate, len(imput))
+                readTask2.timing.cfg_samp_clk_timing(self.__samplerate, sample_mode = dx.constants.AcquisitionType.FINITE, \
+                                                samps_per_chan=len(imput))
+            
+            if outputchans2 != []:
+                for i in outputchans2:
+                    writeTask2.ao_channels.add_ao_voltage_chan(i)
+
+                print(self.__samplerate, len(imput))
+                writeTask2.timing.cfg_samp_clk_timing(self.__samplerate, sample_mode = dx.constants.AcquisitionType.FINITE, \
+                                                 samps_per_chan=len(imput))
+                
+
+                
+            # First the writing
+            if outputchans2 != []:
+                writeTask2.write(imput, auto_start=True)
+            
+                        
+            # First the writing
+            writeTask.write(imput, auto_start=True)
+
+            inputs1 = []
+            inputs2 = []
+            
+            # Now the reading
+            if inputchans2 != []:
+                inputs2 = readTask2.read(number_of_samples_per_channel = number_of_samples_per_channel)
+            if inputchans1 != []:
+                inputs1 = readTask.read(number_of_samples_per_channel = number_of_samples_per_channel)
+            writeTask.stop()
+            if outputchans2 != []:
+                writeTask2.stop()
+            print("Nieuwe versie 2")
+        return inputs1, inputs2
+
     def measure_spectrum(self,
                          frequencies,
                          duration: float =1,

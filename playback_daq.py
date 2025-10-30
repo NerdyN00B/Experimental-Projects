@@ -13,13 +13,17 @@ now = time.strftime("%Y%m%d%H%M%S")
 mean = np.mean(playback)
 playback -= mean
 playback /= np.max(np.abs(playback))
+playback *= 1
 
-daq = MyDAQ(44100, 'myDAQ4')
+daq = MyDAQ(44100, 'myDAQ2')
 
 if just_playback:
     daq.write(playback*3) # Volume control
 else:
-    data = daq.readWrite(playback*3, write_channel='ao0', read_channel='ai1')
+    data = daq.readWrite(playback*3, write_channel='ao0', read_channel='ai0')
+
+    # noth, data = daq.dual_myDAQ_write_read(playback*3, 44100, ['myDAQ1/ao0'], inputchans2 = ['myDAQ2/ai0'])
+
     np.save(f'data/{now}_playback_record.npy', data)
 
     fft = np.fft.fft(data)

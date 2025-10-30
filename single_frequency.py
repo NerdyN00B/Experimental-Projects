@@ -5,13 +5,13 @@ import time
 from mydaq import MyDAQ
 
 
-frequency = 731  # Hz
-amplitude = 3  # V
+frequency = 500  # Hz
+amplitude = 2  # V
 
 now = time.strftime("%Y%m%d%H%M%S")
 
 
-daq = MyDAQ(44100, 'myDAQ4')
+daq = MyDAQ(44100, 'myDAQ2')
 
 _, sine = MyDAQ.generateWaveform(
     'sine',
@@ -21,7 +21,9 @@ _, sine = MyDAQ.generateWaveform(
     duration=5,
 )
 
-data = daq.readWrite(sine, write_channel='ao0', read_channel='ai1')
+data = daq.readWrite(sine, write_channel='ao0', read_channel='ai0')
+
+# data = noth, data = daq.dual_myDAQ_write_read(sine, 44100, ['myDAQ1/ao0'], inputchans2 = ['myDAQ2/ai0'])
 np.save(f'data/{now}_single_frequency_{frequency}Hz.npy', data)
 
 fft = np.fft.fft(data)
@@ -44,7 +46,7 @@ ax.vlines(
 ax.scatter(
     fft_freq[:len(fft)//2],
     dB[:len(fft)//2],
-    s=2,
+    s=4,
     marker='.',
     color='k',
 )
@@ -52,10 +54,8 @@ ax.scatter(
 ax.set_xscale('log')
 ax.set_xlabel('Frequency (Hz)', fontsize=24)
 ax.set_ylabel('Magnitude (dB)', fontsize=24)
-ax.set_title(f'Single Frequency Response at {frequency} Hz, {amplitude} V', 
-             fontsize=30)
-
-ax.tick_params(axis='both', which='major', labelsize=18)
+ax.set_title(f'Single Frequency Response at {frequency} Hz and {amplitude} V', fontsize=28)
+ax.tick_params(labelsize = 16)
 ax.grid()
 
 plt.savefig(f'figures/{now}_single_frequency_{frequency}Hz.png', dpi=300)
