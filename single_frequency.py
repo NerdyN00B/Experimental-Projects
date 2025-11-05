@@ -6,12 +6,12 @@ from mydaq import MyDAQ
 
 
 frequency = 500  # Hz
-amplitude = 2  # V
+amplitude = 3  # V
 
 now = time.strftime("%Y%m%d%H%M%S")
 
 
-daq = MyDAQ(44100, 'myDAQ2')
+daq = MyDAQ(44100, 'myDAQ4')
 
 _, sine = MyDAQ.generateWaveform(
     'sine',
@@ -21,7 +21,10 @@ _, sine = MyDAQ.generateWaveform(
     duration=5,
 )
 
-data = daq.readWrite(sine, write_channel='ao0', read_channel='ai0')
+# data = daq.readWrite(sine, write_channel='ao0', read_channel='ai0')
+data = daq.read(duration=1.1, channel='ai0')
+
+data = data[:int(-0.1*daq.samplerate)]  # Trim to remove last 0.1 seconds.
 
 # data = noth, data = daq.dual_myDAQ_write_read(sine, 44100, ['myDAQ1/ao0'], inputchans2 = ['myDAQ2/ai0'])
 np.save(f'data/{now}_single_frequency_{frequency}Hz.npy', data)
