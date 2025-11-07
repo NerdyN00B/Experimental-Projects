@@ -45,8 +45,24 @@ for i, transfer in enumerate(transfers):
         color='k',
     )
     
-    idx = np.argmin(freq - )
+    idx = np.argmin(np.abs(fftfreq - freqs[i]))
 
     ax[y, x].vlines(
-        
+        fftfreq[idx],
+        np.min(db),
+        np.max(db),
+        colors='r',
+        linestyles='dashed',
+        alpha=0.5,
+        linewidth=1,
     )
+    
+    ax[y, x].set(
+        xlabel='Frequency (Hz)',
+        ylabel='Magnitude (dB)',
+        title=f'Transfer {freqs[i]} Hz',
+    )
+    
+    ax[y, x].set_xlim(freqs[i]-50, freqs[i]+50)
+
+fig.savefig(f'figures/{now}_transfer_overview.png', dpi=300)
