@@ -4,42 +4,45 @@ import time
 
 from dualdaq import DualDaq
 
-freq = 500
+freq = 10000
 
 daq = DualDaq(44100)
 
 duration = 1.1
 
-voltages = np.logspace(-1, 1, 12)
+voltages = np.logspace(-1, 0, 12)
 
 transfer_functions = []
-for voltage in voltages:
+for i, voltage in enumerate(voltages):
+    print(f'{voltage}, ({i+1} / {len(voltages)})')
     sine = daq.gensine(freq, duration, voltage)
     read_data = daq.readwritedual(
         sine,
-        'myDAQ1/ao0',
-        'myDAQ2/ai0',
+        'myDAQ2/ao0',
+        'myDAQ1/ai0',
     )
-    transfer_functions.append(read_data / sine)
-    fft = np.fft.fft(read_data[:-0.1*daq.samplerate])
+    fft = np.fft.fft(read_data[:int(-0.1*daq.samplerate)])
     transfer_functions.append(fft)
 
 now = time.strftime('%Y%m%d%H%M%S')
 fftfreq = np.fft.fftfreq(44100, 1/44100)
 idx = np.argmin(np.abs(fftfreq - 500))
-np.save(f'{now}_min_voltage_test.npy', np.asarray(transfer_functions))
+np.save(f'data/{now}_min_voltage_test_{freq}Hz.npy', np.asarray(transfer_functions))
 
-fig, ax = plt.subplots(3, 4)
-for transfer in transfer_functions:
+fig, ax = plt.subplots(3, 4, layout='tight', figsize=(16, 10))
+
+for i, transfer in enumerate(transfer_functions):
+    x = i%4
+    y = i//4
     db = 20 * np.log10(np.abs(transfer))
-    ax.scatter(
+    ax[y, x].scatter(
         fftfreq[:len(transfer)//2],
         db[:len(transfer)//2],
         s=10,
         marker='.',
         color='k',
     )
-    ax.vlines(
+    ax[y, x].vlines(
         freq,
         np.min(db),
         np.max(db),
@@ -48,12 +51,13 @@ for transfer in transfer_functions:
         alpha=0.5,
         linewidth=1,
     )
-    ax.set(
-        xscale='log',
+    ax[y, x].set(
         xlabel='Frequency (Hz)',
         ylabel='Magnitude (dB)',
-        title='Transfer Function Minimum Voltage Test',
+        title=f'{voltages[i]:.2f} V',
     )
-    ax.xlim(freq-50, freq+50)
+    ax[y, x].set_xlim(freq-50, freq+50)
 
-fig.savefig(f'figures/{now}_min_voltage_test.png', dpi=300)
+fig.suptitle("Test for minimum voltage")
+
+fig.savefig(f'figures/{now}_min_voltage_test_{freq}Hz.png', dpi=300)

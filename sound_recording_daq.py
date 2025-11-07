@@ -6,9 +6,9 @@ from mydaq import MyDAQ
 
 now  = time.strftime("%Y%m%d%H%M%S")
 
-daq = MyDAQ(44100, 'myDAQ4')
+daq = MyDAQ(44100, 'myDAQ1')
 
-file = f'data/{now}_muziekje.npy'
+file = f'data/{now}_buurman_nils.npy'
 
 print("Recording...")
 

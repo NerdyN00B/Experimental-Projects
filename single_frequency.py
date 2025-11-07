@@ -6,12 +6,12 @@ from mydaq import MyDAQ
 
 
 frequency = 500  # Hz
-amplitude = 3  # V
+amplitude = 0.1  # V
 
 now = time.strftime("%Y%m%d%H%M%S")
 
 
-daq = MyDAQ(44100, 'myDAQ4')
+daq = MyDAQ(44100, 'myDAQ1')
 
 _, sine = MyDAQ.generateWaveform(
     'sine',
