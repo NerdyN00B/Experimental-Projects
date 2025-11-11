@@ -20,6 +20,8 @@ daq = MyDAQ(44100, 'myDAQ2')
 if just_playback:
     daq.write(playback*3) # Volume control
 else:
+
+    print("Recording...")
     data = daq.readWrite(playback*3, write_channel='ao0', read_channel='ai0')
 
     # noth, data = daq.dual_myDAQ_write_read(playback*3, 44100, ['myDAQ1/ao0'], inputchans2 = ['myDAQ2/ai0'])
