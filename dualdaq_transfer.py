@@ -10,6 +10,29 @@ duration = 1.1
 freqs = np.logspace(np.log10(400), np.log10(14000), 20, dtype=int)
 print(freqs)
 
+normalisation = np.array([
+    78.3,
+    87.1,
+    90.2,
+    89.7,
+    87.4,
+    80.7,
+    81.4,
+    78.7,
+    86.6,
+    86.0,
+    79.3,
+    79.9,
+    79.3,
+    72.1,
+    79.7,
+    83.3,
+    74.2,
+    77.1,
+    30.4,
+    36.7,
+])
+
 daq = DualDaq(44100)
 
 
@@ -92,19 +115,21 @@ for i, transfer in enumerate(transfers):
 fig.savefig(f'figures/{now}_transfer_overview.png', dpi=300)
 
 found_transfer = np.array(found_transfer)
-magnitude = 20 * np.log10(np.abs(found_transfer))
+normalisation = 10 ** (normalisation / 20)
+
+magnitude = 20 * np.log10(np.abs(found_transfer) / normalisation)
 fig, ax = plt.subplots(figsize=(16,10), layout='tight')
 
 ax.scatter(
     freqs,
     magnitude,
-    s=20,
+    s=200,
     marker='.',
     c='k',
 )
 
 ax.set_xlabel('Frequency (Hz)', fontsize=24)
-ax.set_ylabel('Magnitude (dB)', fontsize=24)
+ax.set_ylabel('Gain (dB)', fontsize=24)
 ax.set_xscale('log')
 ax.set_title('Transfer Function', fontsize=28)
 ax.tick_params(labelsize = 16)
