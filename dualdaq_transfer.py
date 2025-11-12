@@ -7,7 +7,7 @@ from dualdaq import DualDaq
 amplitude = 0.5
 duration = 1.1
 
-freqs = np.logspace(np.log10(400), np.log10(14000), 20, dtype=int)
+freqs = np.logspace(np.log10(400), np.log10(14000), 50, dtype=int)
 print(freqs)
 
 normalisation = np.array([
@@ -53,7 +53,7 @@ now = time.strftime('%Y%m%d%H%M%S')
 np.save(f'data/{now}_transfer.npy', np.asarray(transfers))
 fftfreq = np.fft.fftfreq(int((duration - 0.1) * daq.samplerate), 1/daq.samplerate)
 
-fig, ax = plt.subplots(4, 5, figsize=(16,10), layout='tight')
+# fig, ax = plt.subplots(4, 5, figsize=(16,10), layout='tight')
 
 
 found_transfer = []
@@ -64,58 +64,60 @@ for i, transfer in enumerate(transfers):
     integration_range = 5
 
     db = 20*np.log10(np.abs(transfer))
-    ax[y, x].scatter(
-        fftfreq[:len(fftfreq)//2],
-        db[:len(db)//2],
-        s=10,
-        marker='.',
-        c='k',
-    )
+    # ax[y, x].scatter(
+    #     fftfreq[:len(fftfreq)//2],
+    #     db[:len(db)//2],
+    #     s=10,
+    #     marker='.',
+    #     c='k',
+    # )
     
     idx = np.argmin(np.abs(fftfreq - freqs[i]))
 
-    ax[y, x].vlines(
-        fftfreq[idx],
-        np.min(db),
-        np.max(db),
-        colors='r',
-        linestyles='dashed',
-        alpha=0.5,
-        linewidth=1,
-    )
+    # ax[y, x].vlines(
+    #     fftfreq[idx],
+    #     np.min(db),
+    #     np.max(db),
+    #     colors='r',
+    #     linestyles='dashed',
+    #     alpha=0.5,
+    #     linewidth=1,
+    # )
     
-    ax[y, x].set(
-        xlabel='Frequency (Hz)',
-        ylabel='Magnitude (dB)',
-        title=f'Transfer {freqs[i]} Hz',
-    )
+    # ax[y, x].set(
+    #     xlabel='Frequency (Hz)',
+    #     ylabel='Magnitude (dB)',
+    #     title=f'Transfer {freqs[i]} Hz',
+    # )
 
     new_idx = np.argmax(db[idx-50:idx+50])
     new_idx += idx-50
 
-    ax[y, x].vlines(
-        (fftfreq[new_idx],
-         fftfreq[new_idx-integration_range],
-         fftfreq[new_idx+integration_range]),
-        np.min(db),
-        np.max(db),
-        colors='b',
-        linestyles='dashed',
-        alpha=0.5,
-        linewidth=1,
-    )
+    # ax[y, x].vlines(
+    #     (fftfreq[new_idx],
+    #      fftfreq[new_idx-integration_range],
+    #      fftfreq[new_idx+integration_range]),
+    #     np.min(db),
+    #     np.max(db),
+    #     colors='b',
+    #     linestyles='dashed',
+    #     alpha=0.5,
+    #     linewidth=1,
+    # )
     integration = np.trapezoid(
         transfer[new_idx-integration_range:new_idx+integration_range],
         fftfreq[new_idx-integration_range:new_idx+integration_range],
     )
     found_transfer.append(integration)
     
-    ax[y, x].set_xlim(freqs[i]-50, freqs[i]+50)
+    # ax[y, x].set_xlim(freqs[i]-50, freqs[i]+50)
 
-fig.savefig(f'figures/{now}_transfer_overview.png', dpi=300)
+# fig.savefig(f'figures/{now}_transfer_overview.png', dpi=300)
 
 found_transfer = np.array(found_transfer)
 normalisation = 10 ** (normalisation / 20)
+
+normalisation = 1
 
 magnitude = 20 * np.log10(np.abs(found_transfer) / normalisation)
 fig, ax = plt.subplots(figsize=(16,10), layout='tight')
