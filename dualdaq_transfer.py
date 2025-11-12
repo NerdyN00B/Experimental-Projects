@@ -40,9 +40,9 @@ for i, transfer in enumerate(transfers):
     ax[y, x].scatter(
         db[:len(db)//2],
         fftfreq[:len(fftfreq)//2],
-        size=10,
+        s=10,
         marker='.',
-        color='k',
+        color='r',
     )
     
     idx = np.argmin(np.abs(fftfreq - freqs[i]))
