@@ -28,7 +28,7 @@ for i, freq in enumerate(freqs):
 
 now = time.strftime('%Y%m%d%H%M%S')
 np.save(f'data/{now}_transfer.npy', np.asarray(transfers))
-fftfreq = np.fft.fftfreq(int((duration - 0.1) * daq.samplerate), 1/daq.samplerate)
+fftfreq = np.fft.fftfreq(int(duration - 0.1 * daq.samplerate), 1/daq.samplerate)
 
 fig, ax = plt.subplots(4, 5, figsize=(16,10), layout='tight')
 
@@ -42,7 +42,11 @@ for i, transfer in enumerate(transfers):
         fftfreq[:len(fftfreq)//2],
         s=10,
         marker='.',
+<<<<<<< HEAD
         color='r',
+=======
+        c='k',
+>>>>>>> 08957e746661f2c80582def3e533957f37121a83
     )
     
     idx = np.argmin(np.abs(fftfreq - freqs[i]))
@@ -64,5 +68,6 @@ for i, transfer in enumerate(transfers):
     )
     
     ax[y, x].set_xlim(freqs[i]-50, freqs[i]+50)
+    print(db[idx-5:idx+5])
 
 fig.savefig(f'figures/{now}_transfer_overview.png', dpi=300)
