@@ -38,8 +38,8 @@ for i, transfer in enumerate(transfers):
 
     db = 20*np.log10(np.abs(transfer))
     ax[y, x].scatter(
-        db[:len(db)//2],
         fftfreq[:len(fftfreq)//2],
+        db[:len(db)//2],
         s=10,
         marker='.',
         c='k',
