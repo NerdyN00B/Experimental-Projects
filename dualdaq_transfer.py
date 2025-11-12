@@ -36,6 +36,8 @@ for i, transfer in enumerate(transfers):
     x = i%5
     y = i//5
 
+    integration_range = 5
+
     db = 20*np.log10(np.abs(transfer))
     ax[y, x].scatter(
         fftfreq[:len(fftfreq)//2],
@@ -62,8 +64,22 @@ for i, transfer in enumerate(transfers):
         ylabel='Magnitude (dB)',
         title=f'Transfer {freqs[i]} Hz',
     )
+
+    new_idx = np.argmax(db[idx-50:idx+50])
+    new_idx += idx-50
+
+    ax[y, x].vlines(
+        (fftfreq[new_idx],
+         fftfreq[new_idx-integration_range],
+         fftfreq[new_idx+integration_range]),
+        np.min(db),
+        np.max(db),
+        colors='b',
+        linestyles='dashed',
+        alpha=0.5,
+        linewidth=1,
+    )
     
     ax[y, x].set_xlim(freqs[i]-50, freqs[i]+50)
-    print(db[idx-5:idx+5])
 
 fig.savefig(f'figures/{now}_transfer_overview.png', dpi=300)
