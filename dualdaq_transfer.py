@@ -28,7 +28,7 @@ for i, freq in enumerate(freqs):
 
 now = time.strftime('%Y%m%d%H%M%S')
 np.save(f'data/{now}_transfer.npy', np.asarray(transfers))
-fftfreq = np.fft.fftfreq(int(duration - 0.1 * daq.samplerate), 1/daq.samplerate)
+fftfreq = np.fft.fftfreq(int((duration - 0.1) * daq.samplerate), 1/daq.samplerate)
 
 fig, ax = plt.subplots(4, 5, figsize=(16,10), layout='tight')
 
