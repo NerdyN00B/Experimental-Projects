@@ -32,6 +32,8 @@ fftfreq = np.fft.fftfreq(int((duration - 0.1) * daq.samplerate), 1/daq.samplerat
 
 fig, ax = plt.subplots(4, 5, figsize=(16,10), layout='tight')
 
+
+found_transfer = []
 for i, transfer in enumerate(transfers):
     x = i%5
     y = i//5
@@ -79,7 +81,33 @@ for i, transfer in enumerate(transfers):
         alpha=0.5,
         linewidth=1,
     )
+    integration = np.trapezoid(
+        transfer[new_idx-integration_range:new_idx+integration_range],
+        fftfreq[new_idx-integration_range:new_idx+integration_range],
+    )
+    found_transfer.append(integration)
     
     ax[y, x].set_xlim(freqs[i]-50, freqs[i]+50)
 
 fig.savefig(f'figures/{now}_transfer_overview.png', dpi=300)
+
+found_transfer = np.array(found_transfer)
+magnitude = 20 * np.log10(np.abs(found_transfer))
+fig, ax = plt.subplots(figsize=(16,10), layout='tight')
+
+ax.scatter(
+    freqs,
+    magnitude,
+    s=20,
+    marker='.',
+    c='k',
+)
+
+ax.set_xlabel('Frequency (Hz)', fontsize=24)
+ax.set_ylabel('Magnitude (dB)', fontsize=24)
+ax.set_xscale('log')
+ax.set_title('Transfer Function', fontsize=28)
+ax.tick_params(labelsize = 16)
+ax.grid()
+
+fig.savefig(f'figures/{now}_transfer_function.png', dpi=300)
