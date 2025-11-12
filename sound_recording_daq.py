@@ -8,7 +8,7 @@ now  = time.strftime("%Y%m%d%H%M%S")
 
 daq = MyDAQ(44100, 'myDAQ1')
 
-file = f'data/{now}Uitlijning_random_Words_4.npy'
+file = f'data/{now}Lens_random_Words2_4.npy'
 
 print("Recording...")
 
