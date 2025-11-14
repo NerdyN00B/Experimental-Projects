@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
+from scipy.io.wavfile import write
 from mydaq import MyDAQ
 
 now  = time.strftime("%Y%m%d%H%M%S")
@@ -39,3 +40,15 @@ ax.tick_params(labelsize = 16)
 ax.grid()
 
 fig.savefig(file.replace('.npy', '_spectrum.png').replace('data', 'figures'), dpi=300)
+
+data -= np.mean(data)  # Remove DC offset
+data = data / np.max(np.abs(data))  # Normalize to -1 to 1
+
+amplitude = np.iinfo(np.int16).max
+data = (data * amplitude).astype(np.int16)
+
+write(
+    file.replace('.npy', '.wav').replace('data', 'audio'),
+    daq.samplerate,
+    data
+)
