@@ -9,8 +9,7 @@ now  = time.strftime("%Y%m%d%H%M%S")
 
 daq = MyDAQ(44100, 'myDAQ1')
 
-file = f'data/{now}random_words_googletranslate.npy'
-
+file = f'data/{now}_over_kamer.npy'
 print("Recording...")
 
 data = daq.read(10, channel='ai0')

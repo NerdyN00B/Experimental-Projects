@@ -1,55 +1,21 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import time
 
-from dualdaq import DualDaq
+file = r'data\20251114155231_errored_transfer.npy'
 
-amplitude = 0.5
-duration = 1.1
-measurements = 5
-
+full_transfer = np.load(file)
 freqs = np.logspace(np.log10(400), np.log10(14000), 200, dtype=int)
 
-daq = DualDaq(44100)
-
-time.sleep(10)
-
-full_measurement = []
-for i, freq in enumerate(freqs):
-    print(f'{freq}, {i+1} / {len(freqs)}')
-    sine = daq.gensine(freq, duration, amplitude)
-    single_freq_measurement = []
-    for _ in range(measurements):
-        data = daq.readwritedual(
-            sine,
-            'myDAQ2/ao0',
-            'myDAQ1/ai0',
-        )
-
-        single_freq_measurement.append(data)
-    full_measurement.append(np.asarray(single_freq_measurement))
-
-full_measurement = np.asarray(full_measurement)
-
-full_transfer = np.fft.fft(
-    full_measurement[:, :, :int(-0.1*daq.samplerate)],
-)
-
-file = f'data/{time.strftime("%Y%m%d%H%M%S")}_errored_transfer.npy'
-
-np.save(
-    file,
-    full_transfer,
-)
-
+duration = 1.1
+samplerate = 44100
 
 found_transfer_mean = []
 found_transfer_std = []
 found_transfer = []
 for i, freq in enumerate(freqs):
     fftfreq = np.fft.fftfreq(
-        int((duration - 0.1) * daq.samplerate),
-        1/daq.samplerate
+        int((duration - 0.1) * samplerate),
+        1/samplerate
     )
     
     idx = np.argmin(np.abs(fftfreq - freq))
@@ -77,11 +43,12 @@ found_transfer = np.asarray(found_transfer)
 ax.errorbar(
     freqs,
     found_transfer_mean,
-    yerr=found_transfer_std*10,
+    yerr=found_transfer_std,
     fmt='k.',
     markersize=15,
     capsize=10,
-    label=r'Average measured transfer function $\pm 10\sigma$',
+    label=r'Average measured transfer function $\pm \sigma$',
+    linestyle=':'
 )
 
 # for i in range(3):
@@ -103,6 +70,6 @@ ax.set_title(
 ax.tick_params(labelsize = 16)
 
 fig.savefig(
-    file.replace('.npy', '.png').replace('data', 'figures'),
+    file.replace('.npy', '_reprocessed.png').replace('data', 'figures'),
     dpi=300
 )
