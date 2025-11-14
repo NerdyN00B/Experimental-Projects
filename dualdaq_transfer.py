@@ -7,7 +7,7 @@ from dualdaq import DualDaq
 amplitude = 0.5
 duration = 1.1
 
-freqs = np.logspace(np.log10(400), np.log10(14000), 50, dtype=int)
+freqs = np.logspace(np.log10(400), np.log10(14000), 20, dtype=int)
 print(freqs)
 
 normalisation = np.array([
@@ -64,6 +64,18 @@ for i, transfer in enumerate(transfers):
     integration_range = 5
 
     db = 20*np.log10(np.abs(transfer))
+    
+    idx = np.argmin(np.abs(fftfreq - freqs[i]))
+    
+    new_idx = np.argmax(db[idx-50:idx+50])
+    new_idx += idx-50
+    
+    integration = np.trapezoid(
+        transfer[new_idx-integration_range:new_idx+integration_range],
+        fftfreq[new_idx-integration_range:new_idx+integration_range],
+    )
+    found_transfer.append(integration)
+    
     # ax[y, x].scatter(
     #     fftfreq[:len(fftfreq)//2],
     #     db[:len(db)//2],
@@ -71,8 +83,6 @@ for i, transfer in enumerate(transfers):
     #     marker='.',
     #     c='k',
     # )
-    
-    idx = np.argmin(np.abs(fftfreq - freqs[i]))
 
     # ax[y, x].vlines(
     #     fftfreq[idx],
@@ -90,9 +100,6 @@ for i, transfer in enumerate(transfers):
     #     title=f'Transfer {freqs[i]} Hz',
     # )
 
-    new_idx = np.argmax(db[idx-50:idx+50])
-    new_idx += idx-50
-
     # ax[y, x].vlines(
     #     (fftfreq[new_idx],
     #      fftfreq[new_idx-integration_range],
@@ -104,11 +111,6 @@ for i, transfer in enumerate(transfers):
     #     alpha=0.5,
     #     linewidth=1,
     # )
-    integration = np.trapezoid(
-        transfer[new_idx-integration_range:new_idx+integration_range],
-        fftfreq[new_idx-integration_range:new_idx+integration_range],
-    )
-    found_transfer.append(integration)
     
     # ax[y, x].set_xlim(freqs[i]-50, freqs[i]+50)
 
