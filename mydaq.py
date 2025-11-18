@@ -65,7 +65,7 @@ class MyDAQ():
     
     def _addOutputChannels(self, 
                            task: dx.task.Task, 
-                           channels
+                           channels,
                            ) -> None:
         """Add output channels to the DAQ
         
