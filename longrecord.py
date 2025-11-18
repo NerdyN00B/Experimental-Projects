@@ -2,11 +2,11 @@ import numpy as np
 import time
 
 from scipy.io.wavfile import write
-from longrecord import MyDAQ_Long
+from longdaq import MyDAQ_Long
 
 now  = time.strftime("%Y%m%d%H%M%S")
 
-filename = 'long_measurement'
+filename = 'afstandsloopje'
 
 daq = MyDAQ_Long()
 

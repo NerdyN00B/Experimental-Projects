@@ -7,9 +7,9 @@ from mydaq import MyDAQ
 
 now  = time.strftime("%Y%m%d%H%M%S")
 
-daq = MyDAQ(44100, 'myDAQ1')
+daq = MyDAQ(44100, 'myDAQ4')
 
-file = f'data/{now}_over_kamer.npy'
+file = f'data/{now}_afstandstest_kort.npy'
 print("Recording...")
 
 data = daq.read(10, channel='ai0')

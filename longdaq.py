@@ -1,15 +1,11 @@
 import nidaqmx as dx
 import numpy as np
-import time
-import matplotlib.pyplot as plt
 
 class MyDAQ_Long():
-	def __init__(self, chunksize=4410):
+	def __init__(self, chunksize=1000):
+		self.chunksize = chunksize
 		self.data = []
-        self.chunksize = chunksize
-        
-		
-		
+
 	def capture(self, samplerate=44100, channel='myDAQ4/ai0'):
 		"""Captures input of Ai0 for duration seconds at samplerate samplerate."""
 		self.data = [] # Clear data
@@ -27,12 +23,12 @@ class MyDAQ_Long():
         )
 
 		self.task.start()
-        print("Recording...")
+		print("Recording...")
 		input("Press enter to stop.")
 		self.task.stop()
 	
 		return np.array(self.data).flatten()
-		
+
 	def _updateData(self,
                     task_handle,
                     every_n_samples_event_type,
