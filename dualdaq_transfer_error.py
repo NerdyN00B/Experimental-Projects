@@ -6,13 +6,15 @@ from dualdaq import DualDaq
 
 amplitude = 0.5
 duration = 1.1
-measurements = 5
+measurements = 3
 
-freqs = np.logspace(np.log10(400), np.log10(14000), 200, dtype=int)
+freqs = np.logspace(np.log10(400), np.log10(14000), 250, dtype=int)
 
 daq = DualDaq(44100)
 
-time.sleep(10)
+for i in range(10):
+    print(10-i)
+    time.sleep(1)
 
 full_measurement = []
 for i, freq in enumerate(freqs):

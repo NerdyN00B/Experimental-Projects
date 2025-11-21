@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-file = r'data\20251114155231_errored_transfer.npy'
+file = r'data\20251121131436_errored_transfer.npy'
 
 full_transfer = np.load(file)
 freqs = np.logspace(np.log10(400), np.log10(14000), 200, dtype=int)
