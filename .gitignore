@@ -205,3 +205,5 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+data/20251121122436_errored_transfer.npy
+data/20251121131436_errored_transfer.npy
