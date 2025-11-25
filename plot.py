@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from mydaq import MyDAQ
 
-file = r'data\20251107135340_buurman_nils.npy'
+file = r'data\20251125105914_ikwilhuilenvanuitlijnen.npy'
 
 data = np.load(file)
 

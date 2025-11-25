@@ -10,13 +10,13 @@ filename = 'ikwilhuilenvanuitlijnen'
 
 daq = MyDAQ_Long()
 
-data = daq.capture(channel='myDAQ1/ai0')
+data = daq.capture(channel='myDAQ2'
+'/ai0')
 
 np.save(r'data/' + f"{now}_{filename}.npy", data)
 
 data -= np.mean(data)  # Remove DC offset
 data = data / np.max(np.abs(data))  # Normalize to -1 to 1
-
 amplitude = np.iinfo(np.int16).max
 data = (data * amplitude).astype(np.int16)
 

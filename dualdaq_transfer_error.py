@@ -8,7 +8,7 @@ amplitude = 0.5
 duration = 1.1
 measurements = 3
 
-freqs = np.logspace(np.log10(400), np.log10(14000), 250, dtype=int)
+freqs = np.logspace(np.log10(400), np.log10(14000), 200, dtype=int)
 
 daq = DualDaq(44100)
 
@@ -24,8 +24,8 @@ for i, freq in enumerate(freqs):
     for _ in range(measurements):
         data = daq.readwritedual(
             sine,
-            'myDAQ2/ao0',
-            'myDAQ1/ai0',
+            'myDAQ1/ao0',
+            'myDAQ2/ai0',
         )
 
         single_freq_measurement.append(data)
