@@ -7,8 +7,11 @@ from dualdaq import DualDaq
 amplitude = 0.5
 duration = 1.1
 measurements = 3
+n = 250
 
-freqs = np.logspace(np.log10(400), np.log10(14000), 200, dtype=int)
+print("meting duurt ", (duration * n * measurements / 60), " minuten")
+
+freqs = np.logspace(np.log10(400), np.log10(14000), n, dtype=int)
 
 daq = DualDaq(44100)
 

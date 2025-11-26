@@ -1,10 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-file = r'data\20251125115703_errored_transfer.npy'
+file = r'data\20251126131047_errored_transfer.npy'
 
 full_transfer = np.load(file)
-freqs = np.logspace(np.log10(400), np.log10(14000), 200, dtype=int)
+print(full_transfer.shape)
+
+n = full_transfer.shape[0]
+freqs = np.logspace(np.log10(400), np.log10(14000), n, dtype=int)
 
 duration = 1.1
 samplerate = 44100
@@ -23,10 +26,11 @@ for i, freq in enumerate(freqs):
     true_idx += idx - 50
     
     power = np.trapezoid(
-        full_transfer[i, :, true_idx-5:true_idx+5],
+        full_transfer[i, :, true_idx-5:true_idx+5] ** 2,
         fftfreq[true_idx-5:true_idx+5],
         axis=-1,
     )
+    power = np.sqrt(power)
     found_transfer.append(power)
     db = 20 * np.log10(np.abs(power))
     
@@ -70,6 +74,6 @@ ax.set_title(
 ax.tick_params(labelsize = 16)
 
 fig.savefig(
-    file.replace('.npy', '_reprocessed.png').replace('data', 'figures'),
+    file.replace('.npy', '_reprocessed_improved.png').replace('data', 'figures'),
     dpi=300
 )
