@@ -6,7 +6,7 @@ from longdaq import MyDAQ_Long
 
 now  = time.strftime("%Y%m%d%H%M%S")
 
-filename = 'Engels_Dictee_20kfilter'
+filename = 'helpmetbuis'
 
 daq = MyDAQ_Long()
 
