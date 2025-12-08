@@ -7,9 +7,9 @@ from mydaq import MyDAQ
 
 now  = time.strftime("%Y%m%d%H%M%S")
 
-daq = MyDAQ(44100, 'myDAQ4')
+daq = MyDAQ(44100, 'myDAQ1')
 
-file = f'data/{now}_afstandstest_kort.npy'
+file = f'data/{now}_RandomStilte.npy'
 print("Recording...")
 
 data = daq.read(10, channel='ai0')
