@@ -77,4 +77,15 @@ def make_wav(data, filename):
 
 
 if __name__ == "__main__":
-    file = r''
+    file = r'audio\20251128135935_metklemshort_zonder_filter_dus.wav'
+    data = np.load(file.replace('.wav', '.npy').replace('audio', 'data'))
+    data = removedc(data)
+    clipped_data_dynamic = clip_and_normalize(data, 
+                                              dynamic_max(data, chunksize=44100//2)
+                                              )
+    clipped_data_average = clip_and_normalize(data, 
+                                              averagesquaremax(data, factor=2)
+                                              )
+    make_wav(clipped_data_dynamic, file.replace('.wav', '_dynamic.wav'))
+    make_wav(clipped_data_average, file.replace('.wav', '_average.wav'))
+    
