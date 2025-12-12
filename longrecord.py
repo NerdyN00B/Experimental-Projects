@@ -6,11 +6,11 @@ from longdaq import MyDAQ_Long
 
 now  = time.strftime("%Y%m%d%H%M%S")
 
-filename = '20mDicteeSam'
+filename = 'dictee_2_ramen_20m'
 
 daq = MyDAQ_Long()
 
-data = daq.capture(channel='myDAQ2'
+data = daq.capture(channel='myDAQ1'
 '/ai0')
 
 np.save(r'data/' + f"{now}_{filename}.npy", data)
