@@ -8,7 +8,7 @@ now  = time.strftime("%Y%m%d%H%M%S")
 
 daq = MyDAQ(44100, 'myDAQ1')
 
-file = r'data\20251212134103_20m.npy'
+file = r'data\20251216105212_Door_Raam_van_Deur_Met_Filter.npy'
 
 data = np.load(file)
 

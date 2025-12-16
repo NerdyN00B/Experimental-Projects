@@ -4,7 +4,7 @@ import numpy as np
 
 samplerate = 44100  # Hertz
 
-file = r'data\20251212134103_20m_clipped_6000Hz.npy' \
+file = r'data\20251216105212_Door_Raam_van_Deur_Met_Filter_clipped_6000Hz.npy' \
 ''
 
 data = np.load(file)
