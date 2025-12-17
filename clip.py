@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+from scipy.io.wavfile import write
 
 from mydaq import MyDAQ
 
@@ -8,7 +9,7 @@ now  = time.strftime("%Y%m%d%H%M%S")
 
 daq = MyDAQ(44100, 'myDAQ1')
 
-file = r'data\20251216105212_Door_Raam_van_Deur_Met_Filter.npy'
+file = r'data\20251217112137_Half_Uitlijning_Met_2Ramen.npy'
 
 data = np.load(file)
 
@@ -18,7 +19,7 @@ fft =  np.fft.fft(data)
 fft_freq = np.fft.fftfreq(len(data), 1/daq.samplerate)
 
 # Clipping away everything above 1500 Hz
-Clipfreq = 6000
+Clipfreq = 4000
 smallclip = 0
 
 fft[fft_freq > Clipfreq] = 0 + 0j
@@ -30,6 +31,12 @@ data = abs(np.fft.ifft(fft))
 fft = np.fft.fft(data)
 
 np.save(file.replace('.npy', F'_clipped_{Clipfreq}Hz.npy'), data)
+
+write(
+    file.replace('.npy', F'_clipped_{Clipfreq}Hz.wav').replace('data', 'audio'),
+    44100,
+    data
+)
 
 # dB = 20*np.log10(np.abs(fft))
 

@@ -6,7 +6,7 @@ from longdaq import MyDAQ_Long
 
 now  = time.strftime("%Y%m%d%H%M%S")
 
-filename = 'Door_Raam_van_Deur_Met_5m_opzij'
+filename = 'BHalf_Uitlijning_Met_2Ramen'
 
 daq = MyDAQ_Long()
 
