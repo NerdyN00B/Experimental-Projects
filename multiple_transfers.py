@@ -48,6 +48,43 @@ dataset = {
 duration = 1.1
 samplerate = 44100
 
+fig, ax = plt.subplots(figsize=(8, 4), layout='tight')
+
+
+for label, filepath in dataset.items():
+    data = np.load(filepath)
+    freqs = find_freqs(data)
+    mean, std = determine_transfer(data, freqs)
+    
+    cmap = get_cmap('viridis')
+    radius = int(label.split()[0])
+    color = cmap(radius / 5)
+    
+    ax.errorbar(
+        freqs,
+        mean,
+        yerr=std,
+        fmt='.',
+        markersize=8,
+        capsize=3,
+        color=color,
+        linestyle=':',
+        label=f"radius = {label}",
+    )
+
+ax.set_xscale('log')
+ax.set_xlabel('Frequency (Hz)')
+ax.set_ylabel('Loudness (dB)')
+ax.set_title('Transfer Function Measurements at Various Drum Sizes')
+ax.legend()
+ax.grid()
+
+# plt.show()
+
+filename = r'figures/final_analysis/radius_range_transfer_functions.png'
+fig.savefig(filename, dpi=300)
+fig.savefig(filename.replace('.png', '.pdf'), dpi=300)
+
 fig, ax = plt.subplots(figsize=(16, 10), layout='tight')
 
 for label, filepath in dataset.items():
@@ -64,22 +101,24 @@ for label, filepath in dataset.items():
         mean,
         yerr=std,
         fmt='.',
-        markersize=12,
-        capsize=8,
-       color=color,
+        markersize=15,
+        capsize=5,
+        color=color,
         linestyle=':',
         label=f"radius = {label}",
     )
 
 ax.set_xscale('log')
-ax.set_xlabel('Frequency (Hz)')
-ax.set_ylabel('Transfer Function (dB)')
-ax.set_title('Transfer Function Measurements at Various Drum Sizes')
-ax.legend()
+ax.set_xlabel('Frequency (Hz)', fontsize=18)
+ax.set_ylabel('Loudness (dB)', fontsize=18)
+ax.set_title('Transfer Function Measurements at Various Drum Sizes',
+             fontsize=22)
+ax.legend(fontsize=14)
 ax.grid()
 
-# plt.show()
 
-filename = r'figures/final_analysis/radius_range_transfer_functions.png'
-fig.savefig(filename, dpi=300)
-fig.savefig(filename.replace('.png', '.pdf'), dpi=300)
+fig.savefig(
+    filename.replace('transfer_functions', 
+                     'transfer_functions_presentation'), 
+    dpi=300
+)
