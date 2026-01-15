@@ -13,6 +13,7 @@ ax.errorbar(
     distance,
     (goed + 0.5 * vergelijkbaar) / 10,
     yerr = 0.5 * vergelijkbaar / 10,
+    xerr = 0.15,
     fmt='ok',
     capsize=5
 )

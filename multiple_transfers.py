@@ -109,12 +109,13 @@ for label, filepath in dataset.items():
     )
 
 ax.set_xscale('log')
-ax.set_xlabel('Frequency (Hz)', fontsize=18)
-ax.set_ylabel('Loudness (dB)', fontsize=18)
+ax.set_xlabel('Frequency (Hz)', fontsize=24)
+ax.set_ylabel('Loudness (dB)', fontsize=24)
 ax.set_title('Transfer Function Measurements at Various Drum Sizes',
-             fontsize=22)
+             fontsize=30)
 ax.legend(fontsize=14)
 ax.grid()
+ax.tick_params(labelsize = 20)
 
 
 fig.savefig(
