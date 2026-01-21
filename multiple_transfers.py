@@ -74,7 +74,7 @@ for label, filepath in dataset.items():
 
 ax.set_xscale('log')
 ax.set_xlabel('Frequency (Hz)')
-ax.set_ylabel('Loudness (dB)')
+ax.set_ylabel('Relative Loudness (dB)')
 ax.set_title('Transfer Function Measurements at Various Drum Sizes')
 ax.legend()
 ax.grid()
@@ -110,7 +110,7 @@ for label, filepath in dataset.items():
 
 ax.set_xscale('log')
 ax.set_xlabel('Frequency (Hz)', fontsize=18)
-ax.set_ylabel('Loudness (dB)', fontsize=18)
+ax.set_ylabel('Relative Loudness (dB)', fontsize=18)
 ax.set_title('Transfer Function Measurements at Various Drum Sizes',
              fontsize=22)
 ax.legend(fontsize=14)
